@@ -1,5 +1,4 @@
 require 'date'
-require 'byebug'
 
 class SuperSquareMaker
   def initialize(start)
@@ -60,8 +59,8 @@ class SuperSquareMaker
   def commit
     text = "All work and no play makes Jack a dull boy\n"
     @all_dates.each do |date|
-      # File.open('novella.txt', 'a') { |file| file << text }
-      # `gaa; GIT_AUTHOR_DATE="#{date}" GIT_COMMITTER_DATE="#{date}" gcm "super squares!"`
+      File.open('novella.txt', 'a') { |file| file << text }
+      system("git add -A; git commit -m 'super squares!' --date '#{date}'")
     end
   end
 end
