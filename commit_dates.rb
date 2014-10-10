@@ -5,28 +5,32 @@ class SuperSquareMaker
     @start_date = start
     @outline = flatten_outline
     @all_dates = []
-    find_dates
+    find_major_dates
     commit
   end
 
   def flatten_outline
      %w(
-    -###########--#####------########-----#######--#####
-    ------#**-----#--##------#-------##---#*--------####
+    --##########--#####------########-----#####----#####
+    ------#**-----#--##------#------##----#*--------####
     ------#*-----##---#------#*------##---#**--------##-
-    -----##------#**--##-----#*------###--#####-------#-
-    -----##-----#########----#**-----##---#*------------
-    -#*-###-----##*----##*---#**----##*---#**--------*##
-    -######----##**----###*--#######**----########---###
+    ------##-----#**--##-----#*------###--#####-------#-
+    ------##----#########----#**-----##---#*------------
+    -#*--###----##*----##*---#**----##*---#**--------*##
+    --######---##**----###*--#######**----######-----###
     ).map { |l| l.split('') }.transpose.flatten
   end
 
   def find_dates
     count = 1
-    @outline.uniq.sort.each_with_index do |char, i|
+    @outline.uniq.sort.reverse.each_with_index do |char, i|
       generate_commit_dates(create_mask_for(char), i + count)
       count += 1
     end
+  end
+
+  def find_major_dates
+    generate_commit_dates(create_mask_for("#"), 7)
   end
 
   def create_mask_for(char)
