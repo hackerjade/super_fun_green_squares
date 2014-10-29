@@ -1,10 +1,13 @@
 require 'date'
+require 'byebug'
 
 class SuperSquareMaker
   def initialize(start)
     @start_date = start
     @outline = flatten_outline
     @all_dates = []
+    find_dates
+    commit
   end
 
   def flatten_outline
@@ -19,7 +22,7 @@ class SuperSquareMaker
     ).map { |l| l.split('') }.transpose.flatten
   end
 
-  def shades
+  def find_dates
     count = 1
     @outline.uniq.sort.each_with_index do |char, i|
       generate_commit_dates(create_mask_for(char), i + count)
@@ -51,12 +54,14 @@ class SuperSquareMaker
   def generate_commit_dates(mask, n)
     @all_dates.concat(dates.inject([]) do |all_dates, date|
       fill?(date, mask) ? all_dates.concat(commit_on(date, n)) : all_dates
-    end.map(&:to_s))
+    end)
   end
 
   def commit
+    text = "All work and no play makes Jack a dull boy\n"
     @all_dates.each do |date|
-      `GIT_AUTHOR_DATE="#{date}" GIT_COMMITTER_DATE="#{date}" gcm "super_square_#{date}"`
+      # File.open('novella.txt', 'a') { |file| file << text }
+      # `gaa; GIT_AUTHOR_DATE="#{date}" GIT_COMMITTER_DATE="#{date}" gcm "super squares!"`
     end
   end
 end
